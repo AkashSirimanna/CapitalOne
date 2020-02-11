@@ -10,15 +10,12 @@ class CommentCharMap {
             extensionToComment.put("java", "//");
             extensionToComment.put("cpp", "//");
             extensionToComment.put("c", "//");
-            extensionToComment.put("python", "#");
             extensionToBlockStarter.put("java", "/*");
             extensionToBlockStarter.put("cpp", "/*");
             extensionToBlockStarter.put("c", "/*");
-            extensionToBlockStarter.put("python", "\"\"\"");
             extensionToBlockEnder.put("java", "*/");
             extensionToBlockEnder.put("cpp", "*/");
             extensionToBlockEnder.put("c", "*/");
-            extensionToBlockEnder.put("python", "\"\"\"");
         }
 
         public HashMap<String, String> getCommentMap() {

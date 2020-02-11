@@ -18,8 +18,8 @@ class CodeProcessor {
         Stream<String> stream = null;
         
         try {
-            stream = Files.lines(Paths.get("/Users/asirimanna/Desktop/Deque.cpp"));
-            String fileExtension = "cpp";
+            stream = Files.lines(Paths.get("/Users/asirimanna/Desktop/test.java"));
+            String fileExtension = "java";
             String commentSymbol = map.getCommentMap().get(fileExtension);
             String blockStartSymbol = map.getStarterBlockMap().get(fileExtension);
             String blockEndSymbol = map.getEnderBlockMap().get(fileExtension);
@@ -30,33 +30,34 @@ class CodeProcessor {
             }
             List<String> lines = stream.collect(Collectors.toList());
             for(String line : lines) {
-                if(inBlock) { //if we are in a block, we can only exit a block if we see 
+                for(int i = 0; i < line.length(); i++) {
+                    char c = line.charAt(i);
+                    if(c == '"' || c == '\'') {
+                        if(!inQuotes) { //if we are not in quotes, we enter quotes
+                            inQuotes = true;
+                        }
+                        else {
+                            inQuotes = false;
+                        }
+                    }
+                    else if(!inQuotes) { //if we dont see a quote, we must add to comments but must take into account if we are quotes or not
+                        if(c == commentSymbol.charAt(0) && (i + commentSymbol.length()) <= line.length() && line.substring(i, i+commentSymbol.length()).equals(commentSymbol)) { //if we see a single line comment
+                            singleLineComments++;
+                        }
+                        else if(c == blockStartSymbol.charAt(0) && (i + blockStartSymbol.length()) <= line.length() && line.substring(i, i+blockStartSymbol.length()).equals(blockStartSymbol)) { //if we see the start of a block
+                            totalCommentBlocks++;
+                            inBlock = true;
+                        }
+                    } 
+                }
+                if(inBlock && !inQuotes) { //if we are in a block, we can only exit a block if we see 
                     totalLinesInCommentBlock++;
                     if(line.contains(blockEndSymbol)) { //if we are exiting the block
                         inBlock = false;
                     }
                 }
-                else { //if we arent in a block, we can enter a block or just see single line comments or not see anything
-                    for(int i = 0; i < line.length(); i++) {
-                        char c = line.charAt(i);
-                        if(c == '"' || c == '\'') {
-                            if(!inQuotes) { //if we are not in quotes, we enter quotes
-                                inQuotes = true;
-                            }
-                            else {
-                                inQuotes = false;
-                            }
-                        }
-                        else if(!inQuotes) { //if we dont see a quote, we must add to comments but must take into account if we are quotes or not
-                            if(c == commentSymbol.charAt(0) && line.substring(i, i+commentSymbol.length()).equals(commentSymbol)) { //if we see a single line comment
-                                singleLineComments++;
-                            }
-                            else if(c == blockStartSymbol.charAt(0) && line.substring(i, i+blockStartSymbol.length()).equals(blockStartSymbol)) { //if we see the start of a block
-                                totalCommentBlocks++;
-                                inBlock = true;
-                            }
-                        } 
-                    }
+                if(line.contains("TODO")) {
+                    totalTodos++;
                 }
                 totalLines++;
             }
