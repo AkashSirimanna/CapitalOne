@@ -29,8 +29,8 @@ It uses the hashmap's ability to give us the escape characters for different fil
 # Edge Cases
 
 There are many edge cases that I had to take into consideration. Below are some of the corner cases I considered
-	- Block comment starting and ending in the same line
-	- TODOs within a Block
-	- Comments, Block Comments and TODOS within single quotes
-	- Comments, Block Comments and TODOS within double quotes
+- Block comment starting and ending in the same line
+- TODOs within a Block
+- Comments, Block Comments and TODOS within single quotes
+- Comments, Block Comments and TODOS within double quotes
 
